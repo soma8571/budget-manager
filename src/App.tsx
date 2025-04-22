@@ -24,6 +24,7 @@ function App() {
         }
       } catch(err) {
         console.log(err)
+        SetError('A költségek lekérése jelenleg nem elérhető.')
       }
     }
     fetchData()
@@ -36,14 +37,12 @@ function App() {
   return (
     <>
       <div>
-        {costs.length > 0 ?
+        {costs && costs.length > 0 ?
           <div>
             {costs.map(cost => <li>{cost.cost_name}</li>)}
           </div>
-          : error === "" ? 
-            <div>{error}</div> 
-            :
-            <div>Még nincs adatunk</div>
+          :
+          error === "" && <div>{error}</div> 
         }
       </div>
     </>
