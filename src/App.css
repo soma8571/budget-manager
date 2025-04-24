@@ -1,7 +1,16 @@
+:root {
+    --bg-color: #DAD7CD;
+    --table-header-bg: #588157;
+    --table-evenrow-bg: #A3B18A;
+    --link-color: #344E41;
+    --inputs-bg: #344E41;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    color: black;
 }
 
 body {
@@ -9,20 +18,45 @@ body {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+    background-color: var(--bg-color);
+}
+
+a {
+    color: var(--link-color)
+}
+
+input, select {
+    font-size: 1rem;
+    padding: .5rem;
+    background-color: gainsboro;
+    color: black;
+    /* border: 2px solid var(--table-evenrow-bg); */
+}
+
+input[type="submit"] {
+    background-color: var(--inputs-bg);
+    color: gainsboro;
+    border: none;
+}
+
+input[type="submit"]:hover {
+    cursor: pointer;
 }
 
 table.costs {
     border-collapse: collapse;
-    color: gainsboro;
 }
   
 table.costs td, th {
     padding: .7rem;
-    border-bottom: 1px solid gainsboro;
+}
+
+table.costs tr:nth-child(even) {
+    background-color: var(--table-evenrow-bg);
 }
 
 table.costs th {
-    background-color: salmon;
+    background-color: var(--table-header-bg);
     color: black;
 }
 
@@ -46,4 +80,43 @@ span.totalCost {
     font-weight: bold;
     color: red;
 }
-  
+
+div.addCostCompWrapper {
+    padding: 1rem;
+    max-width: fit-content;
+    border: 1px solid var(--table-header-bg);
+}
+
+div.addCostWrapper {
+    max-width: fit-content;
+}
+
+div.compTitle {
+    font-size: 1.2rem;
+}
+
+div.addCostInputFields {
+    display: grid;
+    gap: 1rem;
+}
+
+div.formField {
+    display: grid;
+}
+
+div.errormsg {
+    color: red;
+    margin: 1rem;
+    padding: .7rem;
+}
+
+div.saveResult {
+    margin: 1rem;
+    color: var(--table-header-bg);
+}
+
+div.layout {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 1rem;
+}

@@ -1,4 +1,4 @@
-export function getCurrentMonthStart() : String {
+export function getCurrentMonthStart(): string {
     const now = new Date()
 
     // Dátum lekérdezése
@@ -6,6 +6,17 @@ export function getCurrentMonthStart() : String {
     const month: string = (now.getMonth() + 1).toString().padStart(2, "0")  // 0-tól indexelt
 
     return `${year}-${month}-01`
+}
+
+export function getTodayDate(): string {
+    const now = new Date()
+
+    // Dátum lekérdezése
+    const year: number = now.getFullYear();
+    const month: string = (now.getMonth() + 1).toString().padStart(2, "0")  // 0-tól indexelt
+    const day: string = (now.getDate()).toString().padStart(2, "0")
+
+    return `${year}-${month}-${day}`
 }
 
 export function formatDate(date: string) {
