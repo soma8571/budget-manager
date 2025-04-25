@@ -6,12 +6,12 @@ import { useState } from 'react'
 
 function App() {
 
-  const [isRefreshNeed, setIsRefreshNeed] = useState<boolean>(false)
+  const [isRefreshNeed, setIsRefreshNeed] = useState<string>("")
 
   return (
     <div className='layout'>
       <CostDisplay />
-      <AddCost />
+      <AddCost onAdd={setIsRefreshNeed}/>
     </div>
   )
 }

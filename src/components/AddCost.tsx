@@ -4,7 +4,11 @@ import { Cost } from "../models/cost.model";
 import { Category } from "../models/category.model";
 import { getTodayDate } from "../common/utils";
 
-const AddCost: React.FC = () => {
+interface DataInputProps {
+  onAdd: (text: string) => void
+}
+
+const AddCost: React.FC<DataInputProps> = ({onAdd}) => {
 
   const emptyCost: Cost = {
     cost_amount: 0,
@@ -45,6 +49,7 @@ const AddCost: React.FC = () => {
       if (response.status === 201) {
         setSaveResult("A költség sikeresen mentve.");
         setNewCost(emptyCost);
+        onAdd(response.data.insertId)
       }
     } catch (err) {
       console.log(err);
