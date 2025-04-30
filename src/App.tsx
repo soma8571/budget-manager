@@ -1,17 +1,20 @@
-import './App.css'
-import CostDisplay from './components/CostDisplay'
-import AddCost from './components/AddCost'
-import { useState } from 'react'
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { NotFound } from './pages/NotFound'
+import { Home } from './pages/Home'
 
 function App() {
 
-  const [addedCostId, setAddedCostId] = useState<string>("")
+  
 
   return (
-    <div className='layout'>
-      <CostDisplay reloadNeed={addedCostId} />
-      <AddCost onAdd={setAddedCostId}/>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Home/>} />
+          <Route path='*' element={<NotFound />}/>
+        </Routes>
+      </BrowserRouter>
+      
     </div>
   )
 }

@@ -8,6 +8,16 @@ export function getCurrentMonthStart(): string {
     return `${year}-${month}-01`
 }
 
+export function getCurrentMonth(): string {
+    const now = new Date()
+
+    // Dátum lekérdezése
+    const year: number = now.getFullYear();
+    const month: string = (now.getMonth() + 1).toString().padStart(2, "0")  // 0-tól indexelt
+
+    return `${year}-${month}`
+}
+
 export function getTodayDate(): string {
     const now = new Date()
 
