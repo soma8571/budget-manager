@@ -1,4 +1,5 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useContext, useState } from "react";
+import { ThemeContext } from "../App";
 import axios from "axios";
 import { Cost } from "../models/cost.model";
 import { Category } from "../models/category.model";
@@ -9,6 +10,8 @@ interface AddCostProp {
 }
 
 const AddCost: React.FC<AddCostProp> = ({onAdd}) => {
+
+  const {isDarkMode} = useContext(ThemeContext)
 
   const emptyCost: Cost = {
     cost_amount: 0,
@@ -91,6 +94,7 @@ const AddCost: React.FC<AddCostProp> = ({onAdd}) => {
                 onChange={handleChange}
                 value={newCost?.cost_name}
                 required
+                className={isDarkMode ? "dark-inputs" : ""}
               />
             </div>
 
@@ -103,6 +107,7 @@ const AddCost: React.FC<AddCostProp> = ({onAdd}) => {
                 onChange={handleChange}
                 value={newCost?.cost_amount}
                 required
+                className={isDarkMode ? "dark-inputs" : ""}
               />
             </div>
 
@@ -115,6 +120,7 @@ const AddCost: React.FC<AddCostProp> = ({onAdd}) => {
                 onChange={handleChange}
                 value={newCost?.cost_date}
                 required
+                className={isDarkMode ? "dark-inputs" : ""}
               />
             </div>
 
@@ -127,6 +133,7 @@ const AddCost: React.FC<AddCostProp> = ({onAdd}) => {
                   onChange={handleChange}
                   value={newCost?.category}
                   required
+                  className={isDarkMode ? "dark-inputs" : ""}
                 >
                   <option value="">Kérlek válassz</option>
                   {categories.map((cat, ind) => (
@@ -144,6 +151,7 @@ const AddCost: React.FC<AddCostProp> = ({onAdd}) => {
               type="submit"
               value="Mentés"
               disabled={error !== "" || loading}
+              className={isDarkMode ? "dark-btn" : ""}
             />
           </div>
         </form>

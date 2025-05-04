@@ -1,4 +1,5 @@
-import React, { useState, useEffect, ReactNode, ChangeEvent } from "react";
+import React, { useState, useEffect, useContext, ReactNode, ChangeEvent } from "react";
+import { ThemeContext } from "../App";
 import axios from "axios";
 import { Cost } from "../models/cost.model";
 import {
@@ -16,6 +17,9 @@ const CostDisplay: React.FC<CostDisplayProp> = ({ reloadNeed }) => {
   const [costs, setCosts] = useState<Cost[]>([]);
   const [error, SetError] = useState("");
   const [actualPeriod, SetActualPeriod] = useState(getCurrentMonth());
+  const [isPending, setIsPending] = useState(false)
+
+  const { isDarkMode } = useContext(ThemeContext)
 
   useEffect(() => {
     fetchData();
@@ -36,8 +40,8 @@ const CostDisplay: React.FC<CostDisplayProp> = ({ reloadNeed }) => {
       const data = response.data;
       if (Array.isArray(data)) {
         setCosts(data);
-        if (data.length === 0) 
-            SetError("Még nincs az adott időszakra vonatkozó költség.")
+        if (data.length === 0)
+          SetError("Még nincs az adott időszakra vonatkozó költség.")
       } else {
         SetError("Hiba a kérés során.");
       }
@@ -85,6 +89,7 @@ const CostDisplay: React.FC<CostDisplayProp> = ({ reloadNeed }) => {
     return header;
   };
 
+  //Költség törlése
   const handleDelete = (e: React.MouseEvent<HTMLImageElement>) => {
     const button = e.currentTarget;
     //alert(button.dataset.id)
@@ -102,6 +107,7 @@ const CostDisplay: React.FC<CostDisplayProp> = ({ reloadNeed }) => {
     }
   };
 
+  //Költségek táblázatos megjelenítését végzi
   const renderCosts = (): ReactNode => {
     const rows = costs.map((cost, ind) => (
       <tr key={ind}>
@@ -123,41 +129,76 @@ const CostDisplay: React.FC<CostDisplayProp> = ({ reloadNeed }) => {
       </tr>
     ));
     return (
-      <table className="costs">
+      <table className={isDarkMode ? "costs dark-table" : "costs"}>
         {renderCostTableHeader()}
         <tbody>{rows}</tbody>
       </table>
     );
   };
 
+  //a hónapkiválasztó változását kezeli
   const handePeriodChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
+    //console.log(e.target.value)
     SetActualPeriod(e.target.value)
+  }
+
+  //A Beolvasás gombon (Google Sheet-ről) történő kattintást kezeli
+  const readFromSheet = async () => {
+    const url = `${import.meta.env.VITE_API_URL}/saveSheetData`
+    const sheetName = actualPeriod.replace("-", ".") + "."
+    setIsPending(true)
+    setCosts([])
+    try {
+      const response = await axios.post(
+        url,
+        { sheetName }
+      )
+      console.log(response)
+      fetchData()
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsPending(false)
+    }
   }
 
   return (
     <div>
-      
-        <div className="costsWrapper">
-          <div className="periodSelector">
-            <input
-              type="month"
-              name="period"
-              id="period"
-              value={actualPeriod}
-              onChange={handePeriodChange}
-            />
-          </div>
-          {costs && costs.length > 0 ? (
-            <>
-                <div className="costsTableWrapper">{renderCosts()}</div>
-                <div>{renderSummaryRow()}</div>
-            </>
-            ) : (
-                error !== "" && <div>{error}</div>
-            )}
-            </div>
+      <div className="costsWrapper">
+        <div className="periodSelector">
+          <label htmlFor="period">Hónap kiválasztása</label>
+          <input
+            type="month"
+            name="period"
+            id="period"
+            value={actualPeriod}
+            onChange={handePeriodChange}
+            className={isDarkMode ? "dark-inputs" : ""}
+          />
         </div>
+        <div className="readFromGSWrapper">
+          <div className="readFromSheetText">
+            {isPending ? "Beolvasás folyamatban..." : "Beolvasás Google Sheet-ről"}
+          </div>
+          <div>
+            <button
+              onClick={readFromSheet}
+              disabled={isPending}
+              className={isDarkMode ? "dark-btn" : ""}
+            >Beolvasás
+            </button>
+          </div>
+        </div>
+        {costs && costs.length > 0 ? (
+          <>
+            <div className="costsTableWrapper">{renderCosts()}</div>
+            <div>{renderSummaryRow()}</div>
+          </>
+        ) : (
+          error !== "" && <div>{error}</div>
+        )}
+      </div>
+    </div>
   );
 };
 
